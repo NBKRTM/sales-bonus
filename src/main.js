@@ -6,6 +6,9 @@
  */
 function calculateSimpleRevenue(purchase, _product) {
    // @TODO: Расчет выручки от операции
+      // purchase — это одна из записей в поле items из чека в data.purchase_records
+   // _product — это продукт из коллекции data.products
+   const { discount, sale_price, quantity } = purchase;
 }
 
 /**
@@ -17,6 +20,7 @@ function calculateSimpleRevenue(purchase, _product) {
  */
 function calculateBonusByProfit(index, total, seller) {
     // @TODO: Расчет бонуса от позиции в рейтинге
+    const { profit } = seller;
 }
 
 /**
@@ -27,8 +31,29 @@ function calculateBonusByProfit(index, total, seller) {
  */
 function analyzeSalesData(data, options) {
     // @TODO: Проверка входных данных
+    if (!data
+        || [data.sellers, data.products, data.purchase_records].every(item => !Array.isArray(item))
+        || [data.sellers.length, data.products.length, data.purchase_records.length].every(
+            item => item === 0
+        )
+    ) { 
+        throw new Error('Не корректные входные данные');
+    }
 
     // @TODO: Проверка наличия опций
+    const { calculateRevenue, calculateBonus } = options;
+
+    // Проверяем, что обе функции присутствуют
+    if (!calculateRevenue || !calculateBonus) {
+        throw new Error(
+            `Не хватает переменной ${!calculateRevenue ? 'calculateRevenue' : 'calculateBonus'}`
+        );
+    } 
+
+    // Проверяем, что обе переменные - функции
+    if (typeof calculateRevenue !== "function" || typeof calculateBonus !== "function") {
+        throw new Error('Переменная не является функцией')
+    }
 
     // @TODO: Подготовка промежуточных данных для сбора статистики
 
